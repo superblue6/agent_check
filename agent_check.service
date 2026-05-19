@@ -1,0 +1,18 @@
+[Unit]
+Description=Teaching AI Agent Server
+After=syslog.target network.target nfs-client.target
+
+[Service]
+Type=simple
+WorkingDirectory=/gaojj/agent_check
+Environment=HOST=0.0.0.0
+Environment=PORT=8001
+Environment=RELOAD=false
+ExecStart=/gaojj/agent_check/.venv/bin/python -u /gaojj/agent_check/server.py
+ExecReload=/bin/kill -s HUP $MAINPID
+Restart=always
+StandardOutput=append:/gaojj/agent_check/logs/server.log
+StandardError=append:/gaojj/agent_check/logs/server.log
+
+[Install]
+WantedBy=multi-user.target
