@@ -33,19 +33,38 @@ if not _deepseek_key:
 os.environ["ARK_API_KEY"] = _deepseek_key
 
 # ── 2. 初始化模型 ──────────────────────────────────────────────────────────────
+# 确保代理环境变量设置（这样 openai 库会自动使用）
+_http_proxy = os.getenv("HTTP_PROXY") or os.getenv("http_proxy")
+_https_proxy = os.getenv("HTTPS_PROXY") or os.getenv("https_proxy")
+
+if _http_proxy:
+    os.environ["HTTP_PROXY"] = _http_proxy
+if _https_proxy:
+    os.environ["HTTPS_PROXY"] = _https_proxy
+
+if _http_proxy or _https_proxy:
+    logger.info(f"使用代理配置 - HTTP_PROXY: {_http_proxy}, HTTPS_PROXY: {_https_proxy}")
+
 model = ChatOpenAI(
     model="ep-20260518113327-5rkl7",
     openai_api_key=_deepseek_key,
     openai_api_base="https://ark.cn-beijing.volces.com/api/v3",
     max_tokens=4096,
     temperature=0.3,
+    timeout=120.0,  # 2分钟超时
+    max_retries=3,  # 最多重试3次
+    verbose=True,   # 开启详细日志
 )
+
 router_model = ChatOpenAI(
     model="ep-20260518113327-5rkl7",
     openai_api_key=_deepseek_key,
     openai_api_base="https://ark.cn-beijing.volces.com/api/v3",
     max_tokens=10,
     temperature=0.1,
+    timeout=60.0,   # 1分钟超时
+    max_retries=3,  # 最多重试3次
+    verbose=True,   # 开启详细日志
 )
 
 # ── 3. State 定义 ──────────────────────────────────────────────────────────────

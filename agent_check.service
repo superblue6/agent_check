@@ -8,6 +8,8 @@ WorkingDirectory=/gaojj/agent_check
 Environment=HOST=0.0.0.0
 Environment=PORT=8001
 Environment=RELOAD=false
+Environment=HTTP_PROXY=http://172.21.16.73:3128
+Environment=HTTPS_PROXY=http://172.21.16.73:3128
 ExecStart=/gaojj/agent_check/.venv/bin/python -u /gaojj/agent_check/server.py
 ExecReload=/bin/kill -s HUP $MAINPID
 Restart=always
