@@ -19,31 +19,31 @@ logger = logging.getLogger(__name__)
 
 # ── 1. 环境配置 ────────────────────────────────────────────────────────────────
 os.environ["LANGCHAIN_TRACING_V2"] = os.getenv("LANGCHAIN_TRACING_V2", "false")
-os.environ["LANGCHAIN_PROJECT"] = os.getenv("LANGCHAIN_PROJECT", "agent_check")
+os.environ["LANGCHAIN_PROJECT"] = "deepseek-v3-2-251201"
 
-_langchain_key = os.getenv("LANGCHAIN_API_KEY")
+_langchain_key = os.getenv("LANGCHAIN_API_KEY", "")
 if _langchain_key:
     os.environ["LANGCHAIN_API_KEY"] = _langchain_key
 
-_deepseek_key = os.getenv("ARK_API_KEY")
+_deepseek_key = os.getenv("ARK_API_KEY", "")
 if not _deepseek_key:
     raise EnvironmentError(
-        "缺少 ARK_API_KEY 环境变量配置。请设置 ARK_API_KEY。"
+        "缺少 ARK_API_KEY 环境变量配置。"
     )
 os.environ["ARK_API_KEY"] = _deepseek_key
 
 # ── 2. 初始化模型 ──────────────────────────────────────────────────────────────
 model = ChatOpenAI(
-    model=os.getenv("ARK_MODEL", "ep-20260518113327-5rkl7"),
+    model="ep-20260518113327-5rkl7",
     openai_api_key=_deepseek_key,
-    openai_api_base=os.getenv("ARK_API_BASE", "https://ark.cn-beijing.volces.com/api/v3"),
+    openai_api_base="https://ark.cn-beijing.volces.com/api/v3",
     max_tokens=4096,
     temperature=0.3,
 )
 router_model = ChatOpenAI(
-    model=os.getenv("ARK_MODEL", "ep-20260518113327-5rkl7"),
+    model="ep-20260518113327-5rkl7",
     openai_api_key=_deepseek_key,
-    openai_api_base=os.getenv("ARK_API_BASE", "https://ark.cn-beijing.volces.com/api/v3"),
+    openai_api_base="https://ark.cn-beijing.volces.com/api/v3",
     max_tokens=10,
     temperature=0.1,
 )
@@ -148,6 +148,9 @@ def peer_agent(state: TeacherState) -> dict:
         logger.error("peer_agent 调用失败！")
         logger.error("错误类型: %s", type(e).__name__)
         logger.error("错误信息: %s", str(e))
+        logger.error("API 端点: %s", model.openai_api_base)
+        logger.error("API 模型: %s", model.model)
+        logger.error("请求消息数: %d", len(messages))
         logger.error("完整错误堆栈:")
         for line in traceback.format_exc().split('\n'):
             logger.error("  %s", line)
@@ -173,6 +176,9 @@ def expert_agent(state: TeacherState) -> dict:
         logger.error("expert_agent 调用失败！")
         logger.error("错误类型: %s", type(e).__name__)
         logger.error("错误信息: %s", str(e))
+        logger.error("API 端点: %s", model.openai_api_base)
+        logger.error("API 模型: %s", model.model)
+        logger.error("请求消息数: %d", len(messages))
         logger.error("完整错误堆栈:")
         for line in traceback.format_exc().split('\n'):
             logger.error("  %s", line)
@@ -198,6 +204,9 @@ def mentor_agent(state: TeacherState) -> dict:
         logger.error("mentor_agent 调用失败！")
         logger.error("错误类型: %s", type(e).__name__)
         logger.error("错误信息: %s", str(e))
+        logger.error("API 端点: %s", model.openai_api_base)
+        logger.error("API 模型: %s", model.model)
+        logger.error("请求消息数: %d", len(messages))
         logger.error("完整错误堆栈:")
         for line in traceback.format_exc().split('\n'):
             logger.error("  %s", line)
@@ -253,6 +262,8 @@ def report_node(state: TeacherState) -> dict:
         logger.error("报告生成节点调用失败！")
         logger.error("错误类型: %s", type(e).__name__)
         logger.error("错误信息: %s", str(e))
+        logger.error("API 端点: %s", model.openai_api_base)
+        logger.error("API 模型: %s", model.model)
         logger.error("对话记录长度: %d", len(dialogue_text))
         logger.error("完整错误堆栈:")
         for line in traceback.format_exc().split('\n'):
@@ -305,6 +316,9 @@ end
         logger.error("smart_router 调用失败！")
         logger.error("错误类型: %s", type(e).__name__)
         logger.error("错误信息: %s", str(e))
+        logger.error("API 端点: %s", router_model.openai_api_base)
+        logger.error("API 模型: %s", router_model.model)
+        logger.error("路由提示词长度: %d", len(router_prompt))
         logger.error("完整错误堆栈:")
         for line in traceback.format_exc().split('\n'):
             logger.error("  %s", line)
