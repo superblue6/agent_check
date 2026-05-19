@@ -148,9 +148,6 @@ def peer_agent(state: TeacherState) -> dict:
         logger.error("peer_agent 调用失败！")
         logger.error("错误类型: %s", type(e).__name__)
         logger.error("错误信息: %s", str(e))
-        logger.error("API 端点: %s", model.openai_api_base)
-        logger.error("API 模型: %s", model.model)
-        logger.error("请求消息数: %d", len(messages))
         logger.error("完整错误堆栈:")
         for line in traceback.format_exc().split('\n'):
             logger.error("  %s", line)
@@ -176,9 +173,6 @@ def expert_agent(state: TeacherState) -> dict:
         logger.error("expert_agent 调用失败！")
         logger.error("错误类型: %s", type(e).__name__)
         logger.error("错误信息: %s", str(e))
-        logger.error("API 端点: %s", model.openai_api_base)
-        logger.error("API 模型: %s", model.model)
-        logger.error("请求消息数: %d", len(messages))
         logger.error("完整错误堆栈:")
         for line in traceback.format_exc().split('\n'):
             logger.error("  %s", line)
@@ -204,9 +198,6 @@ def mentor_agent(state: TeacherState) -> dict:
         logger.error("mentor_agent 调用失败！")
         logger.error("错误类型: %s", type(e).__name__)
         logger.error("错误信息: %s", str(e))
-        logger.error("API 端点: %s", model.openai_api_base)
-        logger.error("API 模型: %s", model.model)
-        logger.error("请求消息数: %d", len(messages))
         logger.error("完整错误堆栈:")
         for line in traceback.format_exc().split('\n'):
             logger.error("  %s", line)
@@ -262,8 +253,6 @@ def report_node(state: TeacherState) -> dict:
         logger.error("报告生成节点调用失败！")
         logger.error("错误类型: %s", type(e).__name__)
         logger.error("错误信息: %s", str(e))
-        logger.error("API 端点: %s", model.openai_api_base)
-        logger.error("API 模型: %s", model.model)
         logger.error("对话记录长度: %d", len(dialogue_text))
         logger.error("完整错误堆栈:")
         for line in traceback.format_exc().split('\n'):
@@ -316,9 +305,6 @@ end
         logger.error("smart_router 调用失败！")
         logger.error("错误类型: %s", type(e).__name__)
         logger.error("错误信息: %s", str(e))
-        logger.error("API 端点: %s", router_model.openai_api_base)
-        logger.error("API 模型: %s", router_model.model)
-        logger.error("路由提示词长度: %d", len(router_prompt))
         logger.error("完整错误堆栈:")
         for line in traceback.format_exc().split('\n'):
             logger.error("  %s", line)
