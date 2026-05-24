@@ -6,8 +6,8 @@ from langchain_openai import ChatOpenAI
 from langchain_core.messages import SystemMessage, HumanMessage
 from langchain_core.runnables import RunnableConfig
 from langgraph.graph import StateGraph, START, END
-from langgraph.checkpoint.sqlite import SqliteSaver
 from langgraph.graph.message import add_messages
+from config import config
 
 # ── 日志配置 ──────────────────────────────────────────────────────────────────
 logging.basicConfig(
@@ -18,24 +18,26 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 # ── 1. 环境配置 ────────────────────────────────────────────────────────────────
-os.environ["LANGCHAIN_TRACING_V2"] = os.getenv("LANGCHAIN_TRACING_V2", "false")
-os.environ["LANGCHAIN_PROJECT"] = "deepseek-v3-2-251201"
+if config.LANGCHAIN_TRACING_V2:
+    os.environ["LANGCHAIN_TRACING_V2"] = "true"
+if config.LANGCHAIN_PROJECT:
+    os.environ["LANGCHAIN_PROJECT"] = config.LANGCHAIN_PROJECT
 
-_langchain_key = os.getenv("LANGCHAIN_API_KEY", "")
+_langchain_key = config.LANGCHAIN_API_KEY
 if _langchain_key:
     os.environ["LANGCHAIN_API_KEY"] = _langchain_key
 
-_deepseek_key = os.getenv("ARK_API_KEY", "")
+_deepseek_key = config.ARK_API_KEY
 if not _deepseek_key:
     raise EnvironmentError(
-        "缺少 ARK_API_KEY 环境变量配置。"
+        "缺少 ARK_API_KEY 配置，请检查 config.yaml。"
     )
 os.environ["ARK_API_KEY"] = _deepseek_key
 
 # ── 2. 初始化模型 ──────────────────────────────────────────────────────────────
 # 确保代理环境变量设置（这样 openai 库会自动使用）
-_http_proxy = os.getenv("HTTP_PROXY") or os.getenv("http_proxy")
-_https_proxy = os.getenv("HTTPS_PROXY") or os.getenv("https_proxy")
+_http_proxy = config.HTTP_PROXY
+_https_proxy = config.HTTPS_PROXY
 
 if _http_proxy:
     os.environ["HTTP_PROXY"] = _http_proxy

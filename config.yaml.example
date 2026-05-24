@@ -1,0 +1,29 @@
+
+# 教研AI Agent 配置文件
+
+# --- 1. OpenAI/LangChain 配置 ---
+langchain:
+  tracing_v2: false
+  project: "deepseek-v3-2-251201"
+  api_key: ""
+
+# --- 2. DeepSeek/ARK API 配置 ---
+ark:
+  api_key: ""
+
+# --- 3. MySQL 数据库配置（读写分离） ---
+database:
+  master_url: "mysql+pymysql://user:password@master-host:3306/teacher_workshop_db"
+  slave_url: "mysql+pymysql://user:password@slave-host:3306/teacher_workshop_db"
+
+# --- 4. 服务配置 ---
+server:
+  host: "127.0.0.1"
+  port: 8001
+  reload: false
+
+# --- 5. 代理配置（可选）---
+proxy:
+  http: ""
+  https: ""
+
